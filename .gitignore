@@ -2,3 +2,5 @@
 /runtime/*
 !/runtime/.gitkeep
 .env
+/ssh_key/*
+!/ssh_key/.gitkeep

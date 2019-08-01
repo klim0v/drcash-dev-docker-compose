@@ -36,8 +36,6 @@ services:
     build:
       context: .
       dockerfile: payment_repository/Dockerfile
-    volumes:
-      - "~/.ssh:~/root/.ssh"
     expose:
       - ${PAYMENT_REPOSITORY_GRPC_PORT}
     environment:
