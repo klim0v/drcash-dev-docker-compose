@@ -27,5 +27,3 @@ COPY --from=builder /go/payment-repository/main /app/app
 COPY --from=builder /go/payment-repository/migrations /app/migrations
 
 CMD ["/app/app"]
-
-EXPOSE 9111

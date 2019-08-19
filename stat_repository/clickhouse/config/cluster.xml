@@ -1,0 +1,24 @@
+<yandex>
+    <clickhouse_remote_servers>
+        <dev_cluster>
+            <!-- shard 01 -->
+            <shard>
+                <replica>
+                    <host>showcase-clickhouse</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>showcase-clickhouse-2</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </dev_cluster>
+    </clickhouse_remote_servers>
+
+    <zookeeper-servers>
+        <node index="1">
+            <host>showcase-clickhouse-zookeeper</host>
+            <port>2181</port>
+        </node>
+    </zookeeper-servers>
+</yandex>

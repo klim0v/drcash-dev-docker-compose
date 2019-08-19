@@ -2,10 +2,64 @@ version: "3"
 
 services:
 
+  stat_repository:
+    build:
+      context: .
+      dockerfile: stat_repository/Dockerfile
+    expose:
+      - ${STAT_REPOSITORY_GRPC_PORT}
+    environment:
+      - CLICKHOUSE1_HOST=stat_repository-showcase-clickhouse
+      - CLICKHOUSE1_PORT=9011
+      - CLICKHOUSE1_USER=default
+      - CLICKHOUSE1_PASSWORD=
+
+  stat_repository-showcase-clickhouse-zookeeper:
+    container_name: stat_repository-showcase-clickhouse-zookeeper
+    image: zookeeper:3.4.13
+    ports:
+      - 2181:2181
+
+  stat_repository-showcase-clickhouse:
+    container_name: stat_repository-showcase-clickhouse
+    image: yandex/clickhouse-server:18.14.19
+    ports:
+      - 8811:8123
+      - 9011:9000
+    volumes:
+      - ./stat_repository/clickhouse/config/ch1.xml:/etc/clickhouse-server/config.xml
+      - ./stat_repository/clickhouse/config/cluster.xml:/etc/clickhouse-server/cluster.xml
+      - ./stat_repository/clickhouse/data/ch1:/var/lib/clickhouse
+      - ./stat_repository/clickhouse/logs/ch1:/var/log/clickhouse-server
+
+  stat_repository-showcase-clickhouse-2:
+    container_name: stat_repository-showcase-clickhouse-2
+    image: yandex/clickhouse-server:18.14.19
+    ports:
+      - 8812:8123
+      - 9012:9000
+    volumes:
+      - ./stat_repository/clickhouse/config/ch2.xml:/etc/clickhouse-server/config.xml
+      - ./stat_repository/clickhouse/config/cluster.xml:/etc/clickhouse-server/cluster.xml
+      - ./stat_repository/clickhouse/data/ch2:/var/lib/clickhouse
+      - ./stat_repository/clickhouse/logs/ch2:/var/log/clickhouse-server
+
+  stat_repository-showcase-clickhouse-3:
+    container_name: stat_repository-showcase-clickhouse-3
+    image: yandex/clickhouse-server:18.14.19
+    ports:
+      - 8813:8123
+      - 9013:9000
+    volumes:
+      - ./stat_repository/clickhouse/config/ch3.xml:/etc/clickhouse-server/config.xml
+      - ./stat_repository/clickhouse/config/cluster.xml:/etc/clickhouse-server/cluster.xml
+      - ./stat_repository/clickhouse/data/ch3:/var/lib/clickhouse
+      - ./stat_repository/clickhouse/logs/ch3:/var/log/clickhouse-server
+
   aggregator_db:
     image: 'postgres:10.2-alpine'
     environment:
-      - POSTGRES_DB=db
+      - POSTGRES_DB=payment_db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - TZ=GMT-3
@@ -47,8 +101,6 @@ services:
       - POSTGRES_SSL_MODE=disable
       - SENTRY_DSN=${PAYMENT_REPOSITORY_SENTRY_DSN}
       - GRPC_PORT=${PAYMENT_REPOSITORY_GRPC_PORT}
-    links:
-      - payment_db:db
 
   payment_db:
     image: 'postgres:10.2-alpine'
