@@ -11,9 +11,9 @@ RUN mkdir -p ~/.ssh && \
     echo "StrictHostKeyChecking no " > ~/.ssh/config && \
     echo -e "[url \"git@github.com:\"]\n\tinsteadOf = https://github.com/" > ~/.gitconfig
 
-RUN git clone git@gitlab.com:dr-code/payment-repository.git
+RUN git clone git@gitlab.com:dr-code/user-repository.git
 
-WORKDIR payment-repository
+WORKDIR user-repository
 
 RUN go build -o main
 
@@ -23,7 +23,7 @@ WORKDIR /app
 
 RUN apk add --no-cache ca-certificates
 
-COPY --from=builder /go/payment-repository/main /app/app
-COPY --from=builder /go/payment-repository/migrations /app/migrations
+COPY --from=builder /go/user-repository/main /app/app
+COPY --from=builder /go/user-repository/migrations /app/migrations
 
 CMD ["/app/app"]

@@ -15,7 +15,7 @@ RUN git clone git@gitlab.com:dr-code/stat-repository.git
 
 WORKDIR stat-repository
 
-RUN go build main.go
+RUN go build -o main
 
 FROM alpine:3.9
 
