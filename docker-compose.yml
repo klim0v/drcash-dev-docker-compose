@@ -13,6 +13,8 @@ services:
       - CLICKHOUSE1_PORT=9011
       - CLICKHOUSE1_USER=default
       - CLICKHOUSE1_PASSWORD=
+      - SENTRY_DSN=${SENTRY_DSN}
+      - GRPC_PORT=${STAT_REPOSITORY_GRPC_PORT}
 
   stat_repository-showcase-clickhouse-zookeeper:
     container_name: stat_repository-showcase-clickhouse-zookeeper
@@ -59,10 +61,10 @@ services:
   aggregator_db:
     image: 'postgres:10.2-alpine'
     environment:
-      - POSTGRES_DB=payment_db
+      - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/aggregator/db:/var/lib/postgresql/data
 
@@ -72,7 +74,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/offer/db:/var/lib/postgresql/data
 
@@ -82,7 +84,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/page_api/db:/var/lib/postgresql/data
 
@@ -93,13 +95,13 @@ services:
     expose:
       - ${PAYMENT_REPOSITORY_GRPC_PORT}
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=payment_db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=${PAYMENT_REPOSITORY_POSTGRES_USER}
       - POSTGRES_PASSWORD=${PAYMENT_REPOSITORY_POSTGRES_PASSWORD}
       - POSTGRES_DB_NAME=${PAYMENT_REPOSITORY_POSTGRES_DB}
       - POSTGRES_SSL_MODE=disable
-      - SENTRY_DSN=${PAYMENT_REPOSITORY_SENTRY_DSN}
+      - SENTRY_DSN=${SENTRY_DSN}
       - GRPC_PORT=${PAYMENT_REPOSITORY_GRPC_PORT}
 
   payment_db:
@@ -108,7 +110,7 @@ services:
       - POSTGRES_DB=${PAYMENT_REPOSITORY_POSTGRES_DB}
       - POSTGRES_USER=${PAYMENT_REPOSITORY_POSTGRES_USER}
       - POSTGRES_PASSWORD=${PAYMENT_REPOSITORY_POSTGRES_PASSWORD}
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/payment/db:/var/lib/postgresql/data
     expose:
@@ -120,7 +122,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/user/db:/var/lib/postgresql/data
 
@@ -130,7 +132,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/order/db:/var/lib/postgresql/data
 
@@ -140,7 +142,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/template/db:/var/lib/postgresql/data
 
@@ -150,7 +152,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - TZ=GMT-3
+      - TZ=UTC
     volumes:
       - ./runtime/postback/db:/var/lib/postgresql/data
 
