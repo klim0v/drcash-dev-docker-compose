@@ -26,7 +26,7 @@ RUN apk add --no-cache ca-certificates
 COPY --from=builder /go/stat-repository/main /app/app
 #todo: add migrations "COPY --from=builder /go/stat-repository/migrations /app/migrations"
 
-#create table local_visits
+#create table visits
 #(
 #	event_date Date,
 #	created_at DateTime,
@@ -38,7 +38,8 @@ COPY --from=builder /go/stat-repository/main /app/app
 #	template_type Int32,
 #	template_id Int32,
 #	stream_code String,
-#	stream_user_id Int32,
+#	stream_aff_user_id Int32,
+#	stream_adv_user_id Int32,
 #	stream_geo_code Array(String),
 #	stream_offer_id Int32,
 #	stream_currency FixedString(3),
@@ -57,9 +58,9 @@ COPY --from=builder /go/stat-repository/main /app/app
 #	sub4 String,
 #	sub5 String
 #)
-#engine = MergeTree() PARTITION BY event_date ORDER BY (stream_currency, stream_user_id, uuid) SETTINGS index_granularity = 8192;
+#engine = MergeTree() PARTITION BY event_date ORDER BY (stream_currency, stream_aff_user_id, uuid) SETTINGS index_granularity = 8192;
 #
-#create table queue_orders
+#create table orders
 #(
 #	event_date Date,
 #	event_time Int64,
